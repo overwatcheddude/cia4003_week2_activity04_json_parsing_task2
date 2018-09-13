@@ -76,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i("BUTTON","Search button was clicked");
 
         String strJson;
-        String [] employees;
-
-        //Calls the JSON object.
         strJson = "{\"Employee\" :[";
         strJson += "{\"id\":\"01\", \"name\":\"Abdulla\", \"salary\":200000},";
         strJson += "{\"id\":\"02\", \"name\":\"Mohammed\", \"salary\":230000},";
@@ -87,43 +84,42 @@ public class MainActivity extends AppCompatActivity {
         strJson += "{\"id\":\"05\", \"name\":\"Hamad\", \"salary\":250000}";
         strJson += "]}";
 
-        employees = new String[5];
-
         EditText etID = findViewById(R.id.etID);
         String ID = etID.getText().toString();
         Log.i("STRING", "ID is " + ID);
-        try {
+
+        String [] employees = new String[1];
+
+        try
+        {
             JSONObject jRootObject = new JSONObject(strJson);
             JSONArray jArray = jRootObject.getJSONArray("Employee");
             for (int i = 0; i < jArray.length(); i++)
             {
-                // Get the JSONObject from the array at position i
                 JSONObject jObject = jArray.getJSONObject(i);
-                // Get the id from the jsonObject
+
                 String strId = jObject.getString("id");
                 Log.i("STRING", "strId is " + strId);
 
-                //get the name from the jsonObject
                 String name = jObject.getString("name");
-
-                // get the salary from the jsonObject
                 String strSalary = jObject.getString("salary");
                 double salary = Double.parseDouble(strSalary);
 
                 if (ID.equals(strId)) {
                     Log.i("IF", ID + " is equal to " + strId);
-                    employees[i] = "id: " + strId + ", Name: " + name + ", Salary: " + salary;
+                    employees[0] = "id: " + strId + ", Name: " + name + ", Salary: " + salary;
+                    Log.i("STRING", "employees[0] contains: " + employees[0]);
                 }
             }
-            //Sets the adapter based on the above results.
-            //Displaying the contents of the array into the ListView
             ListView listView = findViewById(R.id.list);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
-            listView.setAdapter(adapter);
-            /*
-            TODO: ADD ON ITEM CLICK LISTENER
-            */
-        } catch (JSONException e) {
+            Log.i("READ", "ListView has been read");
+            ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
+            Log.i("DECLARATION", "myAdapter has been declared");
+            listView.setAdapter(myAdapter);
+            Log.i("SET", "myAdapter has been set");
+        }
+        catch (JSONException e)
+        {
             e.printStackTrace();
         }
     }
