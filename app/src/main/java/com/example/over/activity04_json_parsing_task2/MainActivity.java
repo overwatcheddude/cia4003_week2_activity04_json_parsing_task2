@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         String ID = etID.getText().toString();
         Log.i("STRING", "ID is " + ID);
 
-        //A string array with a size of 2.
+        //A string array.
         String [] employees = new String[1];
 
         try
