@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -178,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSalarySearch(View v)
     {
-
         String strJson = employeeJSON();
 
         //Reads the salary input
@@ -198,13 +199,14 @@ public class MainActivity extends AppCompatActivity {
         Double minSalary = Double.parseDouble(strMinSalary);
         Double maxSalary = Double.parseDouble(strMaxSalary);
 
-        String [] employees = new String[1];
+        ArrayList<String> employees = new ArrayList<>();
 
         try
         {
             JSONObject jRootObject = new JSONObject(strJson);
             JSONArray jArray = jRootObject.getJSONArray("Employee");
 
+            int j = 0;
             for (int i = 0; i < jArray.length(); i++)
             {
                 JSONObject jObject = jArray.getJSONObject(i);
@@ -215,12 +217,17 @@ public class MainActivity extends AppCompatActivity {
                 Double salary = Double.parseDouble(strSalary);
 
                 if (salary >= minSalary && salary <= maxSalary) {
-                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
+                    employees.add("id: " + strId + ", Name: " + jName + ", Salary: " + strSalary);
+                    Log.i("ARRAY", "employee[j] contains " + "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary);
+                    j++;
                 }
             }
-            if (employees[0] != null)
+            if (!employees.isEmpty())
             {
-                setListView(employees);
+                //The listview displays the results.
+                ListView listView = findViewById(R.id.list);
+                ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
+                listView.setAdapter(myAdapter);
             }
             else
             {
