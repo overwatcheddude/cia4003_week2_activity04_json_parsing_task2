@@ -20,19 +20,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String strJson;
-        String [] employees;
+        resetList();
+    }
 
-        //Calls the JSON object.
-        strJson = "{\"Employee\" :[";
-        strJson += "{\"id\":\"01\", \"name\":\"Abdulla\", \"salary\":200000},";
-        strJson += "{\"id\":\"02\", \"name\":\"Mohammed\", \"salary\":230000},";
-        strJson += "{\"id\":\"03\", \"name\":\"Salem\", \"salary\":100000},";
-        strJson += "{\"id\":\"04\", \"name\":\"Khalid\", \"salary\":150000},";
-        strJson += "{\"id\":\"05\", \"name\":\"Hamad\", \"salary\":250000}";
-        strJson += "]}";
+    private void displayMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
 
-        employees = new String[5];
+    public void onResetList(View v)
+    {
+        resetList();
+
+        displayMessage("The list has been reset");
+    }
+
+    private void resetList()
+    {
+        String strJson = employeeJSON();
+        String [] employees = new String[5];
 
         try {
             JSONObject jRootObject = new JSONObject(strJson);
@@ -49,26 +55,18 @@ public class MainActivity extends AppCompatActivity {
 
                 // get the salary from the jsonObject
                 String strSalary = jObject.getString("salary");
-                double salary = Double.parseDouble(strSalary);
 
-                employees[i] = "id: " + strId + ", Name: " + name + ", Salary: " + salary;
+                employees[i] = "id: " + strId + ", Name: " + name + ", Salary: " + strSalary;
             }
             //Sets the adapter based on the above results.
             //Displaying the contents of the array into the ListView
-            ListView listView = findViewById(R.id.list);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
-            listView.setAdapter(adapter);
+            setListView(employees);
             /*
             TODO: ADD ON ITEM CLICK LISTENER
             */
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void displayMessage(String msg)
-    {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     private String employeeJSON()

@@ -97,4 +97,11 @@
         android:onClick="onSalarySearch"
         android:text="Search Salary" />
 
+    <Button
+        android:id="@+id/btnResetList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onResetList"
+        android:text="Reset List" />
+
 </LinearLayout>
