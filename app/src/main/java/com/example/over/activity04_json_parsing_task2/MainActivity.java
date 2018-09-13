@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         EditText etName = findViewById(R.id.etName);
         String name = etName.getText().toString();
 
-        String [] employees = new String[1];
+        ArrayList<String> employees = new ArrayList<>();
 
         try
         {
@@ -160,12 +160,15 @@ public class MainActivity extends AppCompatActivity {
                 String strSalary = jObject.getString("salary");
 
                 if (jName.contains(name)) {
-                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
+                    employees.add("id: " + strId + ", Name: " + jName + ", Salary: " + strSalary);
                 }
             }
-            if (employees[0] != null)
+            if (!employees.isEmpty())
             {
-                setListView(employees);
+                //The listview displays the results.
+                ListView listView = findViewById(R.id.list);
+                ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
+                listView.setAdapter(myAdapter);
             }
             else
             {
