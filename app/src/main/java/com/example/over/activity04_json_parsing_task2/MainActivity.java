@@ -71,11 +71,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    public void onSearch(View v)
+    private String employeeJSON()
     {
-        Log.i("BUTTON","Search button was clicked");
-
-        //JSON object
         String strJson;
         strJson = "{\"Employee\" :[";
         strJson += "{\"id\":\"01\", \"name\":\"Abdulla\", \"salary\":200000},";
@@ -85,16 +82,104 @@ public class MainActivity extends AppCompatActivity {
         strJson += "{\"id\":\"05\", \"name\":\"Hamad\", \"salary\":250000}";
         strJson += "]}";
 
-        //Reads the ID input
+        return  strJson;
+    }
+
+    private void setListView(String[] myStringArray)
+    {
+        //The listview displays the results.
+        ListView listView = findViewById(R.id.list);
+        Log.i("READ", "ListView has been read");
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myStringArray);
+        Log.i("DECLARATION", "myAdapter has been declared");
+        listView.setAdapter(myAdapter);
+        Log.i("SET", "myAdapter has been set");
+    }
+
+    public void onIdSearch(View v)
+    {
+        String strJson = employeeJSON();
+
         EditText etID = findViewById(R.id.etID);
         String ID = etID.getText().toString();
-        Log.i("STRING", "ID is " + ID);
 
-        //Reads the name input
+        String [] employees = new String[1];
+
+        try
+        {
+            JSONObject jRootObject = new JSONObject(strJson);
+            JSONArray jArray = jRootObject.getJSONArray("Employee");
+
+            for (int i = 0; i < jArray.length(); i++)
+            {
+                JSONObject jObject = jArray.getJSONObject(i);
+
+                String strId = jObject.getString("id");
+                String jName = jObject.getString("name");
+                String strSalary = jObject.getString("salary");
+
+                if (ID.equals(strId)) {
+                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
+                }
+            }
+            if (employees[0] != null)
+            {
+                setListView(employees);
+            }
+            else
+            {
+                displayMessage("No results were found for id: " + ID);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void onNameSearch(View v)
+    {
+        String strJson = employeeJSON();
+
         EditText etName = findViewById(R.id.etName);
         String name = etName.getText().toString();
-        Log.i("STRING", "Name is " + name);
 
+        String [] employees = new String[1];
+
+        try
+        {
+            JSONObject jRootObject = new JSONObject(strJson);
+            JSONArray jArray = jRootObject.getJSONArray("Employee");
+
+            for (int i = 0; i < jArray.length(); i++)
+            {
+                JSONObject jObject = jArray.getJSONObject(i);
+
+                String strId = jObject.getString("id");
+                String jName = jObject.getString("name");
+                String strSalary = jObject.getString("salary");
+
+                if (jName.contains(name)) {
+                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
+                }
+            }
+            if (employees[0] != null)
+            {
+                setListView(employees);
+            }
+            else
+            {
+                displayMessage("No results were found for name: " + name);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void onSalarySearch(View v)
+    {
         //Reads the salary input
         EditText etMinSalary = findViewById(R.id.etMinSalary);
         EditText etMaxSalary = findViewById(R.id.etMaxSalary);
@@ -107,6 +192,21 @@ public class MainActivity extends AppCompatActivity {
             displayMessage("Please fill in both min and max salary.");
             return;
         }
+    }
+}
+/*
+//This is the debug version of onIdSearch.
+public void onIdSearch(View v)
+    {
+        Log.i("BUTTON","ID search button was clicked");
+
+        //JSON object
+        String strJson = employeeJSON();
+
+        //Reads the ID input
+        EditText etID = findViewById(R.id.etID);
+        String ID = etID.getText().toString();
+        Log.i("STRING", "ID is " + ID);
 
         //A string array.
         String [] employees = new String[1];
@@ -144,17 +244,11 @@ public class MainActivity extends AppCompatActivity {
             Log.i("ARRAY", "Employee contains " + employees.length + " value(s)");
             if (employees[0] != null)
             {
-                //The listview displays the results.
-                ListView listView = findViewById(R.id.list);
-                Log.i("READ", "ListView has been read");
-                ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
-                Log.i("DECLARATION", "myAdapter has been declared");
-                listView.setAdapter(myAdapter);
-                Log.i("SET", "myAdapter has been set");
+                setListView(employees);
             }
             else
             {
-                displayMessage("No results were found.");
+                displayMessage("No results were found for id: " + ID);
             }
         }
         catch (JSONException e)
@@ -162,4 +256,4 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-}
+ */

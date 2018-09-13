@@ -19,7 +19,7 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,10 +77,23 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/btnSearch"
+        android:id="@+id/btnSearchID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSearch"
-        android:text="Search" />
+        android:onClick="onIdSearch"
+        android:text="Search ID" />
+
+    <Button
+        android:id="@+id/btnSearchName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onNameSearch"
+        android:text="Search Name" />
+
+    <Button
+        android:id="@+id/btnSearchSalary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Salary" />
 
 </LinearLayout>
