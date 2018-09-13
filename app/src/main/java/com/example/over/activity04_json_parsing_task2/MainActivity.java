@@ -180,17 +180,58 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSalarySearch(View v)
     {
+
+        String strJson = employeeJSON();
+
         //Reads the salary input
         EditText etMinSalary = findViewById(R.id.etMinSalary);
         EditText etMaxSalary = findViewById(R.id.etMaxSalary);
-        String minSalary = etMinSalary.getText().toString();
-        String maxSalary = etMaxSalary.getText().toString();
+        String strMinSalary = etMinSalary.getText().toString();
+        String strMaxSalary = etMaxSalary.getText().toString();
 
         //If min salary is filled, but max salary is not filled (and vice versa), then error msg will be displayed.
-        if ((minSalary.matches("") && !maxSalary.matches("")) || (!minSalary.matches("") && maxSalary.matches("")))
+        if ((strMinSalary.matches("") && !strMaxSalary.matches("")) || (!strMinSalary.matches("") && strMaxSalary.matches("")))
         {
             displayMessage("Please fill in both min and max salary.");
             return;
+        }
+
+        //Converts salaries from string to int
+        Double minSalary = Double.parseDouble(strMinSalary);
+        Double maxSalary = Double.parseDouble(strMaxSalary);
+
+        String [] employees = new String[1];
+
+        try
+        {
+            JSONObject jRootObject = new JSONObject(strJson);
+            JSONArray jArray = jRootObject.getJSONArray("Employee");
+
+            for (int i = 0; i < jArray.length(); i++)
+            {
+                JSONObject jObject = jArray.getJSONObject(i);
+
+                String strId = jObject.getString("id");
+                String jName = jObject.getString("name");
+                String strSalary = jObject.getString("salary");
+                Double salary = Double.parseDouble(strSalary);
+
+                if (salary >= minSalary && salary <= maxSalary) {
+                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
+                }
+            }
+            if (employees[0] != null)
+            {
+                setListView(employees);
+            }
+            else
+            {
+                displayMessage("No results were found for min: " + strMinSalary + " and max: " + strMaxSalary);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
     }
 }

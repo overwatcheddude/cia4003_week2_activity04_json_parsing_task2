@@ -94,6 +94,7 @@
         android:id="@+id/btnSearchSalary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onSalarySearch"
         android:text="Search Salary" />
 
 </LinearLayout>
