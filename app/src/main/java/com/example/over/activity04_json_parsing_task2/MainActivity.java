@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -63,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
             //Sets the adapter based on the above results.
             //Displaying the contents of the array into the ListView
             setListView(employees);
-            /*
-            TODO: ADD ON ITEM CLICK LISTENER
-            */
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -88,12 +86,19 @@ public class MainActivity extends AppCompatActivity {
     private void setListView(String[] myStringArray)
     {
         //The listview displays the results.
-        ListView listView = findViewById(R.id.list);
+        final ListView listView = findViewById(R.id.list);
         Log.i("READ", "ListView has been read");
         ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myStringArray);
         Log.i("DECLARATION", "myAdapter has been declared");
         listView.setAdapter(myAdapter);
         Log.i("SET", "myAdapter has been set");
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                displayMessage(listView.getItemAtPosition(position).toString().trim());
+            }
+        });
     }
 
     public void onIdSearch(View v)
