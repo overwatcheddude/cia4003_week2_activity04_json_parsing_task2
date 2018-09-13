@@ -66,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void displayMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
     public void onSearch(View v)
     {
         Log.i("BUTTON","Search button was clicked");
@@ -84,6 +89,24 @@ public class MainActivity extends AppCompatActivity {
         EditText etID = findViewById(R.id.etID);
         String ID = etID.getText().toString();
         Log.i("STRING", "ID is " + ID);
+
+        //Reads the name input
+        EditText etName = findViewById(R.id.etName);
+        String name = etName.getText().toString();
+        Log.i("STRING", "Name is " + name);
+
+        //Reads the salary input
+        EditText etMinSalary = findViewById(R.id.etMinSalary);
+        EditText etMaxSalary = findViewById(R.id.etMaxSalary);
+        String minSalary = etMinSalary.getText().toString();
+        String maxSalary = etMaxSalary.getText().toString();
+
+        //If min salary is filled, but max salary is not filled (and vice versa), then error msg will be displayed.
+        if ((minSalary.matches("") && !maxSalary.matches("")) || (!minSalary.matches("") && maxSalary.matches("")))
+        {
+            displayMessage("Please fill in both min and max salary.");
+            return;
+        }
 
         //A string array.
         String [] employees = new String[1];
@@ -104,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("STRING", "strId is " + strId);
 
                 //Gets the name.
-                String name = jObject.getString("name");
-                Log.i("STRING", "name is " + name);
+                String jName = jObject.getString("name");
+                Log.i("STRING", "jName is " + jName);
 
                 //Gets the salary
                 String strSalary = jObject.getString("salary");
@@ -113,17 +136,26 @@ public class MainActivity extends AppCompatActivity {
 
                 if (ID.equals(strId)) {
                     Log.i("IF", ID + " is equal to " + strId);
-                    employees[0] = "id: " + strId + ", Name: " + name + ", Salary: " + strSalary;
-                    Log.i("STRING", "employees[0] contains: " + employees[0]);
+                    employees[0] = "id: " + strId + ", Name: " + jName + ", Salary: " + strSalary;
                 }
             }
-            //The listview displays the results.
-            ListView listView = findViewById(R.id.list);
-            Log.i("READ", "ListView has been read");
-            ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
-            Log.i("DECLARATION", "myAdapter has been declared");
-            listView.setAdapter(myAdapter);
-            Log.i("SET", "myAdapter has been set");
+            //Check if the array contains a value or not.
+            Log.i("STRING", "employees[0] contains: " + employees[0]);
+            Log.i("ARRAY", "Employee contains " + employees.length + " value(s)");
+            if (employees[0] != null)
+            {
+                //The listview displays the results.
+                ListView listView = findViewById(R.id.list);
+                Log.i("READ", "ListView has been read");
+                ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
+                Log.i("DECLARATION", "myAdapter has been declared");
+                listView.setAdapter(myAdapter);
+                Log.i("SET", "myAdapter has been set");
+            }
+            else
+            {
+                displayMessage("No results were found.");
+            }
         }
         catch (JSONException e)
         {
