@@ -15,11 +15,6 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    private void displayMessage(String msg)
-    {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.i("BUTTON","Search button was clicked");
 
+        //JSON object
         String strJson;
         strJson = "{\"Employee\" :[";
         strJson += "{\"id\":\"01\", \"name\":\"Abdulla\", \"salary\":200000},";
@@ -84,33 +80,44 @@ public class MainActivity extends AppCompatActivity {
         strJson += "{\"id\":\"05\", \"name\":\"Hamad\", \"salary\":250000}";
         strJson += "]}";
 
+        //Reads the ID input
         EditText etID = findViewById(R.id.etID);
         String ID = etID.getText().toString();
         Log.i("STRING", "ID is " + ID);
 
+        //A string array with a size of 2.
         String [] employees = new String[1];
 
         try
         {
+            //Reads the JSON array.
             JSONObject jRootObject = new JSONObject(strJson);
             JSONArray jArray = jRootObject.getJSONArray("Employee");
+
             for (int i = 0; i < jArray.length(); i++)
             {
+                //Gets the JSON object at index position.
                 JSONObject jObject = jArray.getJSONObject(i);
 
+                //Gets the ID
                 String strId = jObject.getString("id");
                 Log.i("STRING", "strId is " + strId);
 
+                //Gets the name.
                 String name = jObject.getString("name");
+                Log.i("STRING", "name is " + name);
+
+                //Gets the salary
                 String strSalary = jObject.getString("salary");
-                double salary = Double.parseDouble(strSalary);
+                Log.i("STRING", "salary is " + strSalary);
 
                 if (ID.equals(strId)) {
                     Log.i("IF", ID + " is equal to " + strId);
-                    employees[0] = "id: " + strId + ", Name: " + name + ", Salary: " + salary;
+                    employees[0] = "id: " + strId + ", Name: " + name + ", Salary: " + strSalary;
                     Log.i("STRING", "employees[0] contains: " + employees[0]);
                 }
             }
+            //The listview displays the results.
             ListView listView = findViewById(R.id.list);
             Log.i("READ", "ListView has been read");
             ArrayAdapter<String> myAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, employees);
